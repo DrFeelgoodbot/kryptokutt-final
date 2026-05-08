@@ -439,6 +439,20 @@ input[type="range"]::-moz-range-thumb {
   font-size: 12px;
   color: var(--ink-dim);
 }
+.ex-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.ex-link:hover { background: var(--accent); }
 .calc-footer {
   padding: 20px 32px;
   border-top: 0.5px solid var(--border-soft);
@@ -1148,7 +1162,7 @@ const exchanges = [
   { name: 'Binance', flag: 'Global', fee: 0.0010, spread: 0.0015, fx: 0.0050, tags: ['lav'] },
   { name: 'Bybit', flag: 'Global', fee: 0.0010, spread: 0.0015, fx: 0.0050, tags: ['lav'] },
   { name: 'OKX', flag: 'Global', fee: 0.0010, spread: 0.0020, fx: 0.0050, tags: ['lav'] },
-  { name: 'Bitvavo', flag: 'NL', fee: 0.0025, spread: 0.0015, fx: 0.0030, tags: ['lav', 'enkel'] },
+  { name: 'Bitvavo', flag: 'NL', fee: 0.0025, spread: 0.0015, fx: 0.0030, tags: ['lav', 'enkel'], url: 'https://bitvavo.com/invite?a=D8F200477C' },
   { name: 'Kraken Pro', flag: 'US', fee: 0.0026, spread: 0.0015, fx: 0.0050, tags: ['lav'] },
   { name: 'Bitstamp', flag: 'EU', fee: 0.0030, spread: 0.0020, fx: 0.0050, tags: ['lav'] },
   { name: 'Gemini ActiveTrader', flag: 'US', fee: 0.0040, spread: 0.0020, fx: 0.0050, tags: [] },
@@ -1249,7 +1263,9 @@ function calculate() {
         <div class="result-cell">Avgift ${(r.fee * 100).toFixed(2)}%</div>
         <div class="result-cell">Spread ${(r.spread * 100).toFixed(2)}%</div>
         <div class="result-cell highlight">${fmtCrypto(r.cryptoAmount, decimals)} ${symbol}</div>
-        <div class="result-cta">−${fmtKr(r.totalFee)}</div>
+        <div class="result-cta">${r.url
+          ? `<a href="${r.url}" target="_blank" rel="noopener noreferrer" class="ex-link">Gå til ${r.name} →</a>`
+          : `−${fmtKr(r.totalFee)}`}</div>
       </div>
     `;
   }).join('');
