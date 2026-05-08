@@ -777,6 +777,63 @@ footer {
   font-family: var(--mono);
 }
 
+/* ──────── Cookie banner ──────── */
+.cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 14px;
+  padding: 20px 28px;
+  max-width: 560px;
+  width: calc(100% - 48px);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  font-size: 14px;
+  line-height: 1.5;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.cookie-banner.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(16px);
+  pointer-events: none;
+}
+.cookie-banner p { flex: 1; color: rgba(242,238,227,0.8); }
+.cookie-banner p a { color: var(--bg); text-underline-offset: 3px; }
+.cookie-actions { display: flex; gap: 10px; flex-shrink: 0; }
+.cookie-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 0.5px solid rgba(242,238,227,0.25);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--body);
+  transition: background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+.cookie-btn.accept {
+  background: var(--bg);
+  color: var(--ink);
+  border-color: var(--bg);
+}
+.cookie-btn.accept:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.cookie-btn.decline {
+  background: transparent;
+  color: rgba(242,238,227,0.7);
+}
+.cookie-btn.decline:hover { color: var(--bg); border-color: rgba(242,238,227,0.6); }
+@media (max-width: 600px) {
+  .cookie-banner { flex-direction: column; align-items: flex-start; gap: 14px; bottom: 16px; }
+  .cookie-actions { width: 100%; }
+  .cookie-btn { flex: 1; text-align: center; }
+}
+
 /* ──────── Animations ──────── */
 .reveal {
   opacity: 0;
@@ -815,6 +872,14 @@ footer {
 </style>
 </head>
 <body>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="dialog" aria-label="Informasjonskapsler">
+  <p>Vi bruker informasjonskapsler for å huske dine innstillinger. Les mer i vår <a href="#">personvernserklæring</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn decline" id="cookie-decline">Avvis</button>
+    <button class="cookie-btn accept" id="cookie-accept">Godta</button>
+  </div>
+</div>
 
 <nav class="nav">
   <div class="nav-inner">
@@ -1355,6 +1420,20 @@ document.querySelectorAll('.section, .calc, .hero').forEach(el => {
   el.classList.add('reveal');
   observer.observe(el);
 });
+
+// ──────── Cookie banner ────────
+(function () {
+  const banner = document.getElementById('cookie-banner');
+  if (!localStorage.getItem('cookie_consent')) {
+    setTimeout(() => banner.classList.remove('hidden'), 600);
+  }
+  function dismiss(choice) {
+    localStorage.setItem('cookie_consent', choice);
+    banner.classList.add('hidden');
+  }
+  document.getElementById('cookie-accept').addEventListener('click', () => dismiss('accepted'));
+  document.getElementById('cookie-decline').addEventListener('click', () => dismiss('declined'));
+})();
 
 // ──────── Init ────────
 renderTicker();
