@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://drfeelgoodbot.github.io/kryptokutt-final/sitemap.xml
+Sitemap: https://kryptokutt.no/sitemap.xml
