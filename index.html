@@ -558,10 +558,27 @@ input[type="range"]::-moz-range-thumb {
   flex-wrap: wrap;
   gap: 12px;
 }
+.search-row {
+  padding: 16px 24px 0;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.search-input::placeholder { color: var(--ink-dim); }
+.search-input:focus { border-color: var(--accent); }
 .toggle-row {
   display: flex;
   gap: 12px;
-  padding: 16px 24px 8px;
+  padding: 12px 24px 8px;
   flex-wrap: wrap;
 }
 .toggle-chip {
@@ -1134,6 +1151,10 @@ footer {
         </div>
       </div>
 
+      <div class="search-row">
+        <input class="search-input" id="search" type="text" placeholder="Søk etter børs... (Binance, Firi, Coinbase...)">
+      </div>
+
       <div class="toggle-row">
         <button class="toggle-chip active" data-filter="all">Alle</button>
         <button class="toggle-chip" data-filter="norsk">Norske</button>
@@ -1144,7 +1165,7 @@ footer {
       <div class="calc-results" id="results"></div>
 
       <div class="calc-footer">
-        <span>Oppdatert mai 2026 · Avgifter er typiske satser uten volumrabatt</span>
+        <span>Avgifter er typiske satser uten volumrabatt</span>
         <span>Kryptokutt formidler ikke handel · ikke finansiell rådgivning</span>
       </div>
     </div>
@@ -1487,6 +1508,7 @@ function updateTicker() {
 
 // ──────── Calculator ────────
 let currentFilter = 'all';
+let currentSearch = '';
 
 function calculate() {
   const amount = Number(document.getElementById('amount').value) || 0;
@@ -1496,9 +1518,9 @@ function calculate() {
   const decimals = priceData[cryptoKey].decimals;
   const symbol = priceData[cryptoKey].label;
 
-  const filtered = currentFilter === 'all'
-    ? exchanges
-    : exchanges.filter(e => e.tags.includes(currentFilter));
+  const filtered = exchanges
+    .filter(e => currentFilter === 'all' || e.tags.includes(currentFilter))
+    .filter(e => !currentSearch || e.name.toLowerCase().includes(currentSearch));
 
   const results = filtered.map(ex => {
     const totalCost = ex.fee + ex.spread + ex.fx;
@@ -1607,6 +1629,11 @@ function syncFromSlider() {
 amountInput.addEventListener('input', syncFromInput);
 slider.addEventListener('input', syncFromSlider);
 cryptoSelect.addEventListener('change', calculate);
+
+document.getElementById('search').addEventListener('input', e => {
+  currentSearch = e.target.value.toLowerCase().trim();
+  calculate();
+});
 
 document.querySelectorAll('.toggle-chip').forEach(chip => {
   chip.addEventListener('click', () => {
