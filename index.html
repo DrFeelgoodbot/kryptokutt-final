@@ -1677,10 +1677,51 @@ document.querySelectorAll('.section, .calc, .hero').forEach(el => {
 })();
 
 // ──────── News ────────
+const ownArticles = [
+  {
+    url: '/krypto-iran-krig.html',
+    title: 'Krypto og krigen i Iran — Hva skjer med Bitcoin når det brenner?',
+    source: 'Kryptokutt',
+    date: '13. mai 2026'
+  },
+  {
+    url: '/billigste-kryptobors-norge.html',
+    title: 'Billigste kryptobørs i Norge 2026 — Full sammenligning',
+    source: 'Kryptokutt',
+    date: '12. mai 2026'
+  },
+  {
+    url: '/firi-vs-binance.html',
+    title: 'Firi vs Binance — Hvem er billigst for norske kjøpere?',
+    source: 'Kryptokutt',
+    date: '12. mai 2026'
+  },
+  {
+    url: '/hva-er-spread-krypto.html',
+    title: 'Hva er spread på krypto? Den skjulte avgiften forklart',
+    source: 'Kryptokutt',
+    date: '12. mai 2026'
+  }
+];
+
+function renderOwnArticles() {
+  const grid = document.getElementById('news-grid');
+  grid.innerHTML = ownArticles.map(a => `
+    <a href="${a.url}" class="news-card">
+      <div class="news-card-body">
+        <div class="news-card-source">${a.source}</div>
+        <div class="news-card-title">${a.title}</div>
+        <div class="news-card-date">${a.date}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
 async function fetchNews() {
   const grid = document.getElementById('news-grid');
   try {
-    const res = await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN&limit=6&sortOrder=popular');
+    const res = await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN&limit=6&sortOrder=popular&api_key=');
+    if (!res.ok) throw new Error('api error');
     const data = await res.json();
     if (!data.Data || data.Data.length === 0) throw new Error('no data');
     grid.innerHTML = data.Data.map(item => {
@@ -1699,7 +1740,7 @@ async function fetchNews() {
       `;
     }).join('');
   } catch (e) {
-    grid.innerHTML = '<div class="news-loading">Kunne ikke laste nyheter akkurat nå.</div>';
+    renderOwnArticles();
   }
 }
 
