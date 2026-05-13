@@ -945,6 +945,74 @@ footer {
   .cookie-btn { flex: 1; text-align: center; }
 }
 
+/* ──────── Whale radar ──────── */
+.whale-section {
+  padding: 32px 0;
+  border-bottom: 0.5px solid var(--border-soft);
+  background: var(--bg-warm);
+}
+.whale-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.whale-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.whale-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2A4814;
+  animation: pulse 2s infinite;
+}
+.whale-disclaimer {
+  font-size: 11px;
+  color: var(--ink-dim);
+  font-family: var(--mono);
+}
+.whale-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.whale-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 0.5px solid var(--border-soft);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--mono);
+  animation: fadeInRow 0.4s ease;
+}
+@keyframes fadeInRow {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.whale-emoji { font-size: 16px; flex-shrink: 0; }
+.whale-type { font-weight: 600; width: 42px; flex-shrink: 0; }
+.whale-type.buy { color: #2A4814; }
+.whale-type.sell { color: var(--accent); }
+.whale-amount { flex: 1; color: var(--ink); font-weight: 500; }
+.whale-coin { color: var(--ink-muted); width: 36px; flex-shrink: 0; }
+.whale-exchange { color: var(--ink-dim); width: 72px; flex-shrink: 0; }
+.whale-time { color: var(--ink-dim); font-size: 11px; width: 44px; text-align: right; flex-shrink: 0; }
+@media (max-width: 600px) {
+  .whale-exchange { display: none; }
+}
+
 /* ──────── News ──────── */
 .news-grid {
   display: grid;
@@ -1098,6 +1166,20 @@ footer {
     </a>
   </div>
 </header>
+
+<!-- ──────── Whale radar ──────── -->
+<div class="whale-section">
+  <div class="container">
+    <div class="whale-header">
+      <div class="whale-title">
+        <span class="whale-pulse"></span>
+        🐋 Norske hvaler — store transaksjoner
+      </div>
+      <div class="whale-disclaimer">Simulerte data · kun illustrasjon</div>
+    </div>
+    <div class="whale-feed" id="whale-feed"></div>
+  </div>
+</div>
 
 <!-- ──────── News ──────── -->
 <section id="nyheter" class="section" style="padding: 48px 0 32px;">
@@ -1742,6 +1824,65 @@ async function fetchNews() {
     renderOwnArticles();
   }
 }
+
+// ──────── Whale radar ────────
+const whaleCoins = ['BTC', 'ETH', 'SOL', 'XRP', 'ADA'];
+const whaleExchanges = ['Firi', 'Binance', 'Bitvavo', 'Bybit', 'Kraken', 'NBX'];
+const whaleAmounts = [
+  150000, 250000, 380000, 500000, 750000, 1000000,
+  1500000, 2000000, 3500000, 5000000, 8000000, 12000000
+];
+
+function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function randomMinutesAgo(max) {
+  const m = Math.floor(Math.random() * max) + 1;
+  return m < 60 ? `${m}m` : `${Math.floor(m/60)}t`;
+}
+
+function generateWhaleRows(count = 6) {
+  return Array.from({ length: count }, () => {
+    const isBuy = Math.random() > 0.45;
+    const amount = randomFrom(whaleAmounts);
+    const coin = randomFrom(whaleCoins);
+    const exchange = randomFrom(whaleExchanges);
+    const time = randomMinutesAgo(180);
+    return { isBuy, amount, coin, exchange, time };
+  }).sort((a, b) => b.amount - a.amount);
+}
+
+function renderWhales() {
+  const feed = document.getElementById('whale-feed');
+  const rows = generateWhaleRows(6);
+  feed.innerHTML = rows.map(r => `
+    <div class="whale-row">
+      <span class="whale-emoji">🐋</span>
+      <span class="whale-type ${r.isBuy ? 'buy' : 'sell'}">${r.isBuy ? 'KJØP' : 'SALG'}</span>
+      <span class="whale-amount">${Math.round(r.amount).toLocaleString('no-NO')} kr</span>
+      <span class="whale-coin">${r.coin}</span>
+      <span class="whale-exchange">${r.exchange}</span>
+      <span class="whale-time">${r.time} siden</span>
+    </div>
+  `).join('');
+}
+
+// Refresh whales every 30 seconds
+renderWhales();
+setInterval(() => {
+  const feed = document.getElementById('whale-feed');
+  const newRow = generateWhaleRows(1)[0];
+  const el = document.createElement('div');
+  el.className = 'whale-row';
+  el.innerHTML = `
+    <span class="whale-emoji">🐋</span>
+    <span class="whale-type ${newRow.isBuy ? 'buy' : 'sell'}">${newRow.isBuy ? 'KJØP' : 'SALG'}</span>
+    <span class="whale-amount">${Math.round(newRow.amount).toLocaleString('no-NO')} kr</span>
+    <span class="whale-coin">${newRow.coin}</span>
+    <span class="whale-exchange">${newRow.exchange}</span>
+    <span class="whale-time">Akkurat nå</span>
+  `;
+  feed.insertBefore(el, feed.firstChild);
+  if (feed.children.length > 6) feed.removeChild(feed.lastChild);
+}, 30000);
 
 // ──────── Init ────────
 renderExchangeGrid();
