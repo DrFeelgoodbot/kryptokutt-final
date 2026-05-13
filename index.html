@@ -955,7 +955,6 @@ footer {
   color: rgba(255,255,255,0.6);
   display: flex;
   align-items: center;
-  gap: 0;
 }
 .whale-bar-label {
   padding: 9px 16px;
@@ -970,23 +969,20 @@ footer {
 }
 .whale-bar-feed {
   display: flex;
-  gap: 0;
-  overflow: hidden;
-  flex: 1;
-  padding: 0 4px;
+  gap: 48px;
+  padding: 9px 24px;
+  white-space: nowrap;
+  animation: whale-slide 22s linear infinite;
+}
+@keyframes whale-slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 .whale-bar-item {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 20px;
-  border-right: 0.5px solid rgba(255,255,255,0.08);
-  white-space: nowrap;
-  animation: fadeInRow 0.5s ease;
-}
-@keyframes fadeInRow {
-  from { opacity: 0; transform: translateX(-6px); }
-  to { opacity: 1; transform: translateX(0); }
+  flex-shrink: 0;
 }
 .whale-bar-fiat { color: #fff; font-weight: 500; }
 .whale-bar-btc { color: rgba(255,255,255,0.45); }
@@ -1807,16 +1803,17 @@ async function fetchWhales() {
       .sort((a, b) => b.value - a.value)
       .slice(0, 5);
     if (whales.length === 0) throw new Error('no whales');
-    feed.innerHTML = whales.map(tx => {
+    const html = whales.map(tx => {
       const btc = (tx.value / 100000000).toFixed(4);
       const nok = Math.round((tx.value / 100000000) * btcNok).toLocaleString('no-NO');
-      return `<div class="whale-bar-item">
+      return `<span class="whale-bar-item">
         <span class="whale-bar-fiat">${nok} kr</span>
         <span class="whale-bar-btc">${btc} ₿</span>
-      </div>`;
+      </span>`;
     }).join('');
+    feed.innerHTML = html + html;
   } catch (e) {
-    feed.innerHTML = '<div class="whale-bar-item"><span class="whale-bar-btc">Henter data...</span></div>';
+    feed.innerHTML = '<span class="whale-bar-item"><span class="whale-bar-btc">Laster store transaksjoner…</span></span>';
   }
   setTimeout(fetchWhales, 60000);
 }
