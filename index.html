@@ -1175,7 +1175,7 @@ footer {
         <span class="whale-pulse"></span>
         🐋 Norske hvaler — store transaksjoner
       </div>
-      <div class="whale-disclaimer">Simulerte data · kun illustrasjon</div>
+      <div class="whale-disclaimer">Live data · mempool.space · Bitcoin</div>
     </div>
     <div class="whale-feed" id="whale-feed"></div>
   </div>
@@ -1825,69 +1825,53 @@ async function fetchNews() {
   }
 }
 
-// ──────── Whale radar ────────
-const whaleCoins = ['BTC', 'ETH', 'SOL', 'XRP', 'ADA'];
-const whaleExchanges = ['Firi', 'Binance', 'Bitvavo', 'Bybit', 'Kraken', 'NBX'];
-const whaleAmounts = [
-  150000, 250000, 380000, 500000, 750000, 1000000,
-  1500000, 2000000, 3500000, 5000000, 8000000, 12000000
-];
-
-function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function randomMinutesAgo(max) {
-  const m = Math.floor(Math.random() * max) + 1;
-  return m < 60 ? `${m}m` : `${Math.floor(m/60)}t`;
-}
-
-function generateWhaleRows(count = 6) {
-  return Array.from({ length: count }, () => {
-    const isBuy = Math.random() > 0.45;
-    const amount = randomFrom(whaleAmounts);
-    const coin = randomFrom(whaleCoins);
-    const exchange = randomFrom(whaleExchanges);
-    const time = randomMinutesAgo(180);
-    return { isBuy, amount, coin, exchange, time };
-  }).sort((a, b) => b.amount - a.amount);
-}
-
-function renderWhales() {
+// ──────── Whale radar (Mempool.space) ────────
+async function fetchWhales() {
   const feed = document.getElementById('whale-feed');
-  const rows = generateWhaleRows(6);
-  feed.innerHTML = rows.map(r => `
-    <div class="whale-row">
-      <span class="whale-emoji">🐋</span>
-      <span class="whale-type ${r.isBuy ? 'buy' : 'sell'}">${r.isBuy ? 'KJØP' : 'SALG'}</span>
-      <span class="whale-amount">${Math.round(r.amount).toLocaleString('no-NO')} kr</span>
-      <span class="whale-coin">${r.coin}</span>
-      <span class="whale-exchange">${r.exchange}</span>
-      <span class="whale-time">${r.time} siden</span>
-    </div>
-  `).join('');
-}
+  try {
+    const res = await fetch('https://mempool.space/api/mempool/recent');
+    if (!res.ok) throw new Error('api error');
+    const txs = await res.json();
 
-// Refresh whales every 30 seconds
-renderWhales();
-setInterval(() => {
-  const feed = document.getElementById('whale-feed');
-  const newRow = generateWhaleRows(1)[0];
-  const el = document.createElement('div');
-  el.className = 'whale-row';
-  el.innerHTML = `
-    <span class="whale-emoji">🐋</span>
-    <span class="whale-type ${newRow.isBuy ? 'buy' : 'sell'}">${newRow.isBuy ? 'KJØP' : 'SALG'}</span>
-    <span class="whale-amount">${Math.round(newRow.amount).toLocaleString('no-NO')} kr</span>
-    <span class="whale-coin">${newRow.coin}</span>
-    <span class="whale-exchange">${newRow.exchange}</span>
-    <span class="whale-time">Akkurat nå</span>
-  `;
-  feed.insertBefore(el, feed.firstChild);
-  if (feed.children.length > 6) feed.removeChild(feed.lastChild);
-}, 30000);
+    // Filter transactions > 0.5 BTC (50M satoshis)
+    const btcNok = priceData?.BTC?.nok || 880000;
+    const whales = txs
+      .filter(tx => tx.value >= 50000000)
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 6);
+
+    if (whales.length === 0) throw new Error('no whales');
+
+    feed.innerHTML = whales.map(tx => {
+      const btc = (tx.value / 100000000).toFixed(4);
+      const nok = Math.round((tx.value / 100000000) * btcNok).toLocaleString('no-NO');
+      const short = tx.txid.slice(0, 8) + '…';
+      return `
+        <div class="whale-row">
+          <span class="whale-emoji">🐋</span>
+          <span class="whale-type buy">BTC</span>
+          <span class="whale-amount">${nok} kr</span>
+          <span class="whale-coin">${btc} ₿</span>
+          <span class="whale-exchange">
+            <a href="https://mempool.space/tx/${tx.txid}" target="_blank" rel="noopener" style="color:var(--ink-dim);text-decoration:none;" title="${tx.txid}">${short}</a>
+          </span>
+          <span class="whale-time">Nå</span>
+        </div>`;
+    }).join('');
+
+    // Refresh every 60 seconds
+    setTimeout(fetchWhales, 60000);
+  } catch (e) {
+    // Fallback: silent, keep whatever is shown
+    setTimeout(fetchWhales, 60000);
+  }
+}
 
 // ──────── Init ────────
 renderExchangeGrid();
 fetchPrices();
 fetchNews();
+fetchWhales();
 </script>
 
 </body>
