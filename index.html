@@ -203,6 +203,19 @@ body {
   transition: color 0.2s ease;
 }
 .nav-links a:hover { color: var(--ink); }
+.nav-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ink);
+  color: #fff !important;
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px !important;
+  font-weight: 500;
+  transition: opacity 0.2s !important;
+}
+.nav-contact:hover { opacity: 0.75; color: #fff !important; }
 
 /* ──────── Ticker ──────── */
 .ticker {
@@ -1112,6 +1125,7 @@ footer {
       <a href="#hvorfor">Hvorfor</a>
       <a href="#nyheter">Nyheter</a>
       <a href="#faq">FAQ</a>
+      <a href="mailto:stiskjer@gmail.com" class="nav-contact">✉ Samarbeid</a>
     </div>
   </div>
 </nav>
