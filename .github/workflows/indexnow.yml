@@ -1,0 +1,25 @@
+name: IndexNow — notify search engines on push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit URLs to IndexNow
+        run: |
+          curl -s -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{
+              "host": "kryptokutt.no",
+              "key": "325edc107be64759adc231a2eed37b7c",
+              "keyLocation": "https://kryptokutt.no/325edc107be64759adc231a2eed37b7c.txt",
+              "urlList": [
+                "https://kryptokutt.no/",
+                "https://kryptokutt.no/billigste-kryptobors-norge.html",
+                "https://kryptokutt.no/firi-vs-binance.html",
+                "https://kryptokutt.no/hva-er-spread-krypto.html"
+              ]
+            }'
