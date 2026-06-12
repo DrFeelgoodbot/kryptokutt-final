@@ -101,30 +101,30 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=DM+Sans:opsz,wght@9..40,400..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg: #F2EEE3;
-  --bg-warm: #EBE6D8;
-  --surface: #FBFAF5;
+  --bg: #FFFFFF;
+  --bg-warm: #F4F6F8;
+  --surface: #FAFBFC;
   --surface-alt: #FFFFFF;
-  --ink: #0E0E0C;
-  --ink-muted: #5A5A50;
-  --ink-dim: #8A8A80;
-  --accent: #D9401C;
-  --accent-soft: #F4E0D8;
-  --teal: #1F4548;
-  --border: #D8D2C2;
-  --border-soft: #E4DFD0;
-  --best-bg: #E8EFD4;
-  --best-text: #2A4814;
-  --best-border: #B8C994;
-  --worst-bg: #F5DDD3;
-  --worst-text: #6E2510;
-  --display: 'Fraunces', Georgia, serif;
-  --body: 'DM Sans', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ink: #15191E;
+  --ink-muted: #5B6571;
+  --ink-dim: #98A1AC;
+  --accent: #0A8150;
+  --accent-soft: #E4F3EA;
+  --teal: #0F2E22;
+  --border: #E2E6EA;
+  --border-soft: #EEF1F4;
+  --best-bg: #E7F4EC;
+  --best-text: #0A6B3D;
+  --best-border: #B6E0C6;
+  --worst-bg: #FDECEA;
+  --worst-text: #B3261E;
+  --display: 'Inter', system-ui, -apple-system, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'Inter', ui-monospace, 'SF Mono', monospace;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -137,7 +137,8 @@ body {
   font-family: var(--body);
   font-size: 16px;
   line-height: 1.55;
-  font-feature-settings: 'ss01', 'cv11';
+  font-feature-settings: 'cv05';
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -178,18 +179,18 @@ body {
   letter-spacing: -0.01em;
 }
 .logo-mark {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   background: var(--accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-family: var(--display);
-  font-style: italic;
-  font-size: 13px;
-  font-weight: 500;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 700;
 }
 .nav-links {
   display: flex;
@@ -234,8 +235,8 @@ body {
   white-space: nowrap;
 }
 .ticker-item { display: inline-flex; align-items: center; gap: 8px; }
-.ticker-up { color: #2A4814; }
-.ticker-down { color: #6E2510; }
+.ticker-up { color: var(--best-text); }
+.ticker-down { color: var(--worst-text); }
 @keyframes slide {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -257,25 +258,22 @@ body {
   align-items: center;
   gap: 12px;
 }
-.hero-label::before {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: var(--ink-muted);
+.hero-label {
+  letter-spacing: 0.08em;
 }
 .hero-title {
   font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(48px, 8vw, 96px);
-  line-height: 0.98;
-  letter-spacing: -0.025em;
-  margin-bottom: 32px;
-  max-width: 1000px;
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+  max-width: 760px;
 }
 .hero-title em {
-  font-style: italic;
+  font-style: normal;
   color: var(--accent);
-  font-weight: 300;
+  font-weight: 700;
 }
 .hero-sub {
   font-size: 19px;
@@ -290,16 +288,16 @@ body {
   align-items: center;
   gap: 10px;
   padding: 14px 24px;
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  color: #fff;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
   transition: transform 0.2s ease, background 0.2s ease;
 }
 .hero-cta:hover {
-  background: var(--accent);
+  background: var(--best-text);
   transform: translateY(-1px);
 }
 .hero-cta-arrow { font-size: 16px; }
@@ -326,8 +324,8 @@ body {
 }
 .calc-title {
   font-family: var(--display);
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 19px;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 .calc-status {
@@ -342,7 +340,7 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #2A4814;
+  background: var(--accent);
   animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
@@ -464,12 +462,12 @@ input[type="range"]::-moz-range-thumb {
 }
 .summary-value {
   font-family: var(--display);
-  font-size: 32px;
-  font-weight: 400;
+  font-size: 30px;
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
 }
-.summary-value.accent { color: var(--accent); font-style: italic; }
+.summary-value.accent { color: var(--accent); font-style: normal; }
 .summary-detail {
   font-size: 13px;
   color: var(--ink-muted);
@@ -524,7 +522,7 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 4px;
   font-weight: 500;
 }
-.result-tag.norsk { background: #E8E0F0; color: #4A2470; }
+.result-tag.norsk { background: #E3EDF7; color: #1F4E79; }
 .result-tag.best { background: var(--best-text); color: var(--best-bg); }
 .result-name-meta {
   font-size: 12px;
@@ -549,17 +547,17 @@ input[type="range"]::-moz-range-thumb {
 .ex-link {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
-  background: var(--ink);
-  color: var(--bg);
+  padding: 7px 14px;
+  background: var(--accent);
+  color: #fff;
   text-decoration: none;
   font-size: 12px;
-  font-weight: 500;
-  border-radius: 999px;
+  font-weight: 600;
+  border-radius: 7px;
   white-space: nowrap;
   transition: background 0.2s ease;
 }
-.ex-link:hover { background: var(--accent); }
+.ex-link:hover { background: var(--best-text); }
 .calc-footer {
   padding: 20px 32px;
   border-top: 0.5px solid var(--border-soft);
@@ -625,22 +623,19 @@ input[type="range"]::-moz-range-thumb {
   align-items: center;
   gap: 12px;
 }
-.section-label::before {
-  content: '';
-  width: 24px;
-  height: 1px;
-  background: var(--accent);
+.section-label {
+  letter-spacing: 0.08em;
 }
 .section-title {
   font-family: var(--display);
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 400;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.05;
+  line-height: 1.12;
   margin-bottom: 24px;
   max-width: 720px;
 }
-.section-title em { font-style: italic; color: var(--accent); }
+.section-title em { font-style: normal; color: var(--accent); font-weight: 700; }
 .section-lede {
   font-size: 18px;
   color: var(--ink-muted);
@@ -669,17 +664,18 @@ input[type="range"]::-moz-range-thumb {
 }
 .how-num {
   font-family: var(--display);
-  font-style: italic;
-  font-size: 56px;
-  font-weight: 300;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--accent);
   line-height: 1;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .how-title {
   font-family: var(--display);
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 19px;
+  font-weight: 600;
   margin-bottom: 12px;
   letter-spacing: -0.01em;
 }
@@ -744,11 +740,12 @@ input[type="range"]::-moz-range-thumb {
 
 /* ──────── Editorial section ──────── */
 .editorial {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--bg-warm);
+  color: var(--ink);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
 }
 .editorial .section-label { color: var(--accent); }
-.editorial .section-label::before { background: var(--accent); }
 .editorial-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -757,32 +754,33 @@ input[type="range"]::-moz-range-thumb {
 }
 .editorial-headline {
   font-family: var(--display);
-  font-size: clamp(40px, 5vw, 64px);
-  font-weight: 300;
-  line-height: 1.05;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.12;
   letter-spacing: -0.02em;
 }
 .editorial-headline em {
-  font-style: italic;
+  font-style: normal;
   color: var(--accent);
+  font-weight: 700;
 }
 .editorial-body p {
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.65;
-  color: rgba(242, 238, 227, 0.75);
+  color: var(--ink-muted);
   margin-bottom: 18px;
 }
-.editorial-body strong { color: var(--bg); font-weight: 500; }
+.editorial-body strong { color: var(--ink); font-weight: 600; }
 .editorial-quote {
   font-family: var(--display);
-  font-style: italic;
-  font-weight: 300;
-  font-size: 24px;
-  line-height: 1.4;
-  border-left: 2px solid var(--accent);
-  padding-left: 24px;
-  margin: 32px 0;
-  color: var(--bg);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.45;
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 20px;
+  margin: 28px 0;
+  color: var(--ink);
 }
 
 /* ──────── FAQ ──────── */
@@ -1136,11 +1134,6 @@ footer {
   </div>
 </div>
 
-<div class="whale-bar">
-  <div class="whale-bar-label">🐋 Store tx</div>
-  <div class="whale-bar-feed" id="whale-feed"></div>
-</div>
-
 <header class="hero">
   <div class="container">
     <div class="hero-label">Priskalkulator · 18 børser</div>
@@ -1306,26 +1299,25 @@ footer {
     <div class="editorial-grid">
       <div>
         <h2 class="editorial-headline">
-          Kryptobørsene har <em>perfeksjonert</em> kunsten å skjule kostnader.
+          Mye av kostnaden er <em>skjult</em> i spread og valutakurs.
         </h2>
       </div>
       <div class="editorial-body">
         <p>
-          Bankene lærte finansbransjen å skjule avgifter i spread og valutakurs. Kryptobørsene
-          har bare tatt det ett skritt videre. Du ser "0 % avgift" i toppen, men den effektive
-          kostnaden kan være tre ganger så høy som hos en tradisjonell aktør med synlig prislapp.
+          De fleste børser oppgir bare den annonserte avgiften. Spread og vekslingspåslag
+          kommer i tillegg, og vises sjelden tydelig. Resultatet er at en plattform som
+          reklamerer med "0 % avgift" kan koste flere ganger mer enn en aktør med synlig prisliste.
         </p>
         <div class="editorial-quote">
-          Nybegynnere lokkes til de dyreste plattformene fordi de er enklest å bruke. Bekvemmelighet er aldri gratis.
+          De enkleste plattformene er ofte de dyreste. Brukervennlighet har en pris som sjelden står oppført.
         </div>
         <p>
-          For en kjøper med 100 000 kroner i året i kryptosparing utgjør forskjellen mellom
-          en lavprisbørs og en fintech-app tusenvis av kroner – år etter år. Over et tiår
-          er det forskjellen mellom å ha råd til en ny iPhone hvert år, eller ikke.
+          For en kjøper som sparer 100 000 kroner i krypto i året, utgjør forskjellen mellom
+          en lavprisbørs og en fintech-app flere tusen kroner – år etter år.
         </p>
         <p>
-          <strong>Kryptokutt eksisterer for å gjøre disse tallene synlige.</strong> Vi selger ikke krypto.
-          Vi tar imot ingen depotmidler. Vi er en kalkulator.
+          <strong>Kryptokutt gjør disse tallene synlige.</strong> Vi selger ikke krypto,
+          tar ikke imot depotmidler og formidler ikke handel. Vi er en kalkulator.
         </p>
       </div>
     </div>
@@ -1804,39 +1796,10 @@ async function fetchNews() {
   }
 }
 
-// ──────── Whale alert bar (Mempool.space) ────────
-async function fetchWhales() {
-  const feed = document.getElementById('whale-feed');
-  try {
-    const res = await fetch('https://mempool.space/api/mempool/recent');
-    if (!res.ok) throw new Error('api error');
-    const txs = await res.json();
-    const btcNok = priceData?.BTC?.nok || 880000;
-    const whales = txs
-      .filter(tx => tx.value >= 50000000)
-      .sort((a, b) => b.value - a.value)
-      .slice(0, 5);
-    if (whales.length === 0) throw new Error('no whales');
-    const html = whales.map(tx => {
-      const btc = (tx.value / 100000000).toFixed(4);
-      const nok = Math.round((tx.value / 100000000) * btcNok).toLocaleString('no-NO');
-      return `<span class="whale-bar-item">
-        <span class="whale-bar-fiat">${nok} kr</span>
-        <span class="whale-bar-btc">${btc} ₿</span>
-      </span>`;
-    }).join('');
-    feed.innerHTML = html + html;
-  } catch (e) {
-    feed.innerHTML = '<span class="whale-bar-item"><span class="whale-bar-btc">Laster store transaksjoner…</span></span>';
-  }
-  setTimeout(fetchWhales, 60000);
-}
-
 // ──────── Init ────────
 renderExchangeGrid();
 fetchPrices();
 fetchNews();
-fetchWhales();
 </script>
 
 </body>
